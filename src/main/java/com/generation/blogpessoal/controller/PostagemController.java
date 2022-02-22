@@ -22,6 +22,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.generation.blogpessoal.model.Postagem;
 import com.generation.blogpessoal.repository.PostagemRepository;
+import com.generation.blogpessoal.repository.TemaRepository;
 
 @RestController
 @RequestMapping("/postagens")
@@ -30,6 +31,9 @@ public class PostagemController {
 	
 	@Autowired
 	private PostagemRepository repository;
+	
+	@Autowired
+	private TemaRepository temaRepository;
 	
 	@GetMapping
 	public ResponseEntity<List<Postagem>> getAll(){
@@ -50,14 +54,22 @@ public class PostagemController {
 }
 	@PostMapping
 	public ResponseEntity<Postagem> postPostagem (@Valid @RequestBody Postagem postagem){
-		return ResponseEntity.status(HttpStatus.CREATED).body(repository.save(postagem));
+		
+		if(temaRepository.existsById(postagem.getTema().getId()))
+			return ResponseEntity.status(HttpStatus.CREATED)
+			.body(repository.save(postagem));
+
+		return ResponseEntity.notFound().build();
 }
 	@PutMapping
 	public ResponseEntity<Postagem> putPostagem (@RequestBody Postagem postagem){
-		return repository.findById(postagem.getId())
-		.map(resposta -> ResponseEntity.status(HttpStatus.OK).body(repository.save(postagem)))
-		.orElse(ResponseEntity.notFound().build());
-		 
+		if(temaRepository.existsById(postagem.getTema().getId())) {
+			return repository.findById(postagem.getId()) 
+					.map(resposta -> ResponseEntity.status(HttpStatus.OK)
+					.body(repository.save(postagem))) 
+					.orElse(ResponseEntity.notFound().build()); 
+		}
+		return ResponseEntity.notFound().build();
 }
 
 	@DeleteMapping("/{id}")
