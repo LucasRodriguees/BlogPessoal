@@ -60,15 +60,16 @@ public class TemaController {
 		.map(resposta -> ResponseEntity.status(HttpStatus.OK).body(temaRepository.save(tema)))
 		.orElse(ResponseEntity.notFound().build());
 }
+
 	@DeleteMapping("/{id}")
-	@ResponseStatus(value = HttpStatus.NO_CONTENT)
-	public void deleteTema(@PathVariable Long id) {
-		Optional<Tema> tema = temaRepository.findById(id);
+	public ResponseEntity<?> deletePostagem(@PathVariable Long id) {
 		
-		if (tema.isEmpty())
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-		
-		temaRepository.deleteById(id);
-		
-}
+		return temaRepository.findById(id)
+				.map(resposta -> {
+					temaRepository.deleteById(id);
+					return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+				})
+				.orElse(ResponseEntity.notFound().build());
+
+	}
 }

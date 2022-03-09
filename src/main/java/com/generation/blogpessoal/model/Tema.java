@@ -21,19 +21,12 @@ public class Tema {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@NotBlank(message=" O atributo é obrigatorio")
+	@NotBlank(message=" O atributo Descrição é obrigatorio e não pode conter em branco")
 	private String descricao;
 	
-	@OneToMany(mappedBy = "tema", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "tema", cascade = CascadeType.REMOVE)
 	@JsonIgnoreProperties("tema")
 	private List<Postagem> postagem;
-
-	public Tema(Long id, String descricao) {
-		this.id = id;
-		this.descricao = descricao;
-	}
-	
-	public Tema() { }
 
 	public Long getId() {
 		return id;

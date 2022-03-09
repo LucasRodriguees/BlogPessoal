@@ -23,11 +23,11 @@ public class Postagem {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@NotBlank(message = "o atribiuto título é Obrigatorio")
+	@NotBlank(message = "o atributo título é Obrigatorio")
 	@Size(min = 5, max = 100, message = "O atributo título deve conter no mínimo 5 e no máximo 100 caracteres")
 	private String titulo;
 	
-	@NotBlank(message = "o atribiuto título é Obrigatorio")
+	@NotBlank(message = "o atributo título é Obrigatorio")
 	@Size(min = 10, max = 1000, message = "O atributo título deve conter no mínimo 10 e no máximo 1000 caracteres")
 	private String texto;
 	 
@@ -42,7 +42,6 @@ public class Postagem {
 	@JsonIgnoreProperties("postagem")
 	private Usuario usuario;
 
-	/*Métodos Get and set*/
 	public Long getId() {
 		return id;
 	}
